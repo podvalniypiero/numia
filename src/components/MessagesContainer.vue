@@ -1,28 +1,38 @@
 <template>
-
-  <div v-if="!messagesStore.state.isError && messagesStore.state.messages.length === 0" 
-  class="messages-container">
-    <p>Загрузка сообщений...<br/> Это может занять немного времени...</p>
+  <div
+    v-if="
+      !messagesStore.state.isError && messagesStore.state.messages.length === 0
+    "
+    class="messages-container-else"
+  >
+    <p>
+      Загрузка сообщений...<br />
+      Это может занять немного времени...
+    </p>
   </div>
-  <div v-else-if="!messagesStore.state.isError && messagesStore.state.messages.length !== 0" class="messages-container">  
-     <MessageCard
+  <div
+    v-else-if="
+      !messagesStore.state.isError && messagesStore.state.messages.length !== 0
+    "
+    class="messages-container"
+  >
+    <MessageCard
       v-for="message in messagesStore.state.messages"
       :key="message"
       :message="message"
     />
   </div>
-  <p v-else> Ошибка загрузки сообщений...</p>
+  <p v-else class="messages-container-else">Ошибка загрузки сообщений...</p>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useToast } from 'vue-toastification';
-import MessageCard from './MessageCard.vue';
-import { useMessagesStore } from '../store/messages';
+import { onMounted, ref } from "vue";
+import { useToast } from "vue-toastification";
+import MessageCard from "./MessageCard.vue";
+import { useMessagesStore } from "../store/messages";
 
 const messagesStore = useMessagesStore();
 const toast = useToast();
-
 
 onMounted(async () => {
   const { data, error } = await messagesStore.fetchMessages();
@@ -46,5 +56,11 @@ onMounted(async () => {
   gap: 2rem;
   background-image: linear-gradient(to right, #cab7f2, #a8c0ff);
   border-radius: 2rem;
+}
+.messages-container-else {
+  background-image: linear-gradient(to right, #cab7f2, #a8c0ff);
+  padding: 5rem;
+  border-radius: 2rem;
+  font-size: 2rem;
 }
 </style>
